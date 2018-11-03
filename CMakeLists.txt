@@ -1,0 +1,20 @@
+cmake_minimum_required(VERSION 3.0)
+project(pvaccess_example VERSION 0.0.1 LANGUAGES CXX)
+
+list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_LIST_DIR}/cmake")
+find_package(PVAccessCPP REQUIRED)
+if (NOT PVAccessCPP_FOUND)
+  message(FATAL_ERROR "Could not find PVAccessCPP")
+endif()
+
+add_executable(pvaccess_example src/main)
+target_link_libraries(pvaccess_example PUBLIC PVAccessCPP::PVAccessCPP)
+
+file(GLOB EPICS_LIBS /opt/conda/envs/epics/bases/base-3.15.4/lib/linux-x86_64/*.so)
+message(${EPICS_LIBS})
+target_link_libraries(pvaccess_example PUBLIC /opt/conda/envs/epics/modules/pvDataCPP/6.0.0/3.15.4/lib/linux-x86_64/libpvDataCPP.so)
+target_link_libraries(pvaccess_example PUBLIC ${EPICS_LIBS})
+target_include_directories(pvaccess_example PRIVATE /opt/conda/envs/epics/modules/pvDataCPP/6.0.0/3.15.4/include)
+target_include_directories(pvaccess_example PRIVATE $ENV{EPICS_BASE}/include)
+target_include_directories(pvaccess_example PRIVATE $ENV{EPICS_BASE}/include/compiler/gcc)
+target_include_directories(pvaccess_example PRIVATE $ENV{EPICS_BASE}/include/os/Linux/)
