@@ -25,6 +25,7 @@ def describe_methods(definition_cursor):
     for node in definition_cursor.walk_preorder():
         if node.kind == CursorKind.CXX_METHOD:
             methods[node.spelling] = {
+                "name": node.spelling,
                 "args": [{"name": arg.spelling, "type": arg.type.spelling} for arg in node.get_arguments()],
                 "return": node.result_type.spelling,
             }
